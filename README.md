@@ -3,7 +3,7 @@
 - Google docs: [link]()
 
 ## Tentative Project: Patrol Drone
-(Add helpful any information!)
+(Add any helpful information!)
 
 #### Breakdown:
 - Physical drone model with fully-opensourced dynamics
