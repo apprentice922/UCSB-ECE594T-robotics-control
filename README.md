@@ -40,7 +40,9 @@ m\ddot y = F\sin\theta \\
 I_z\ddot \theta = \tau_z
 \end{cases}
 $$
+
 Or 
+
 $$
 \underbrace{
 \begin{bmatrix}
@@ -50,8 +52,7 @@ m&0&0\\
 \end{bmatrix}
 }_{M(q)}
 \ddot q
-=
-\underbrace{
+=\underbrace{
 \begin{bmatrix}
 F\cos\theta\\
 F\sin\theta\\
