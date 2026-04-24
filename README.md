@@ -45,6 +45,7 @@ By $$\frac{(1)}{(2)}$$, $$q_3$$ can be acquired: $$q_3 = -tan^{-1}\frac{m\ddot{q
 ### Solution
 
 Control from one point to another, assume the start and end angular and its speed are $$0$$, $$x,y$$ speed are also $0$. So that:
+
 $$
 \begin{align*}
 q_1 &= f(t) = a_7t^7 + a_6t^6+ a_5t^5 + a_4t^4+a_3t^3+a_2t^2+a_1t + a_0, \\
