@@ -1,0 +1,119 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[bottom]{footmisc}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+\title{Power-efficient Planar Quadrotor Control through Convex Optimization}
+
+%\author{\IEEEauthorblockN{\textbf{Yuchen Chen}}
+%\IEEEauthorblockA{\textit{Electrical and Computer Engineering} \\
+%\textit{University of California, Santa Barbara}\\
+%Goleta, CA, USA \\
+%yuchen\_chen@ucsb.edu}
+%\and
+%\IEEEauthorblockN{\textbf{Tianyi Chen}}
+%\IEEEauthorblockA{\textit{Electrical and Computer Engineering} \\
+%\textit{University of California, Santa Barbara}\\
+%Goleta, CA, USA \\
+%tianyi\_chen@ucsb.edu}
+%}
+\maketitle
+
+\section{\textbf{Motivation}}
+
+Unmanned air vehicles (UAVs) are ubiquitous in real life. It has been widely used in fields like delivery, rescue, and performing many dangerous tasks that humans are incapable of. However, it is inefficient to control it manually or with simple control algorithms due to the amount of control required and the limited power available. In this project, our goal is to minimize the time it takes a UAV to complete a simulated flight task between obstacles. To be more specific, we will use the planar quadrotor model mentioned in the lecture and build a 2D environment with borders and gate obstacles for the simulation.
+
+\footnotetext{Project Under UCSB ECE594T in Spring 2026; Code available at: \url{https://github.com/apprentice922/UCSB-ECE594T-robotics-control}}
+
+\section{\textbf{Technical Approach}}
+
+\subsection*{Milestone I}
+\subsubsection*{Mathematical Model Establishment}
+Following the lecture notes, the planar quadrotor dynamics are governed by:
+\begin{align}
+    \quad &m\ddot q_1(t) = -\sin(q_3(t))\big(u_1(t)+u_2(t)\big) \label{eq:q1}\\
+                     &m\ddot q_2(t) + mg = \cos(q_3(t))\big(u_1(t)+u_2(t)\big) \label{eq:q2} \\
+                     &I\ddot q_3(t) = r\big(u_2(t)-u_1(t)\big) \label{eq:q3}
+\end{align}
+%By $\frac{(1)}{(2)} = q_3 = -\tan^{-1}\frac{m\ddot{q_1}}{m\ddot{q_2}+mg}$, $q_3$ can be acquired: controlling $\mathbf{q_1}$ and $\mathbf{q_2}$
+To enable trajectory planning, the horizontal and vertical positions are parameterized as degree-7 polynomials in time:
+\begin{align*}
+    q_1 &= a_7t^7 + a_6t^6+ a_5t^5 + a_4t^4+a_3t^3+a_2t^2+a_1t + a_0 \\
+    q_2 &= b_7t^7 + b_6t^6+ b_5t^5 + b_4t^4+b_3t^3+b_2t^2+b_1t + b_0
+\end{align*}
+
+\subsubsection*{Convex Optimization for Quadrotor control}
+We first consider a simple problem, where the quadrotor travels between two positions subject only to a maximum thrust limit and the physical properties. The optimization is formulated as:
+\begin{align}
+    \min \quad& T_{total}= \sum_{k} h\\
+    \text{s.t.}\quad& \mathbf{q} \text{ satisfies dynamics (1)--(3)} \label{eq:model} \\
+    & \mathbf{u} \le \mathbf{U_{max}} \label{eq:max_u}
+\end{align}
+Where $h$ denotes the discrete time step size, and $k$ is the fixed number of steps in the current task. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Milestone II}
+\subsubsection*{Environment Setup for Non-convex Task}
+We extend the problem to a 2D racing scenario, in which the quadrotor departs from an initial position, passes through a sequence of gate checkpoints in order, and arrives at a designated destination.
+
+\subsubsection*{Task Decomposition}
+The set becomes non-convex due to the constraints of collision avoidance and thrust bound.
+
+\begin{align*}
+    %\min\quad &\sum_{k=0}^N u_{1,k}^2 + u_{2,k}^2 \\
+    \min \quad& T_{total}\\
+    \text{s.t. }\quad& \text{constraints from Eq. \ref{eq:model} and \ref{eq:max_u}}\\
+    & \bigl(x_k, y_k\bigr) \notin \mathbb{X}, \quad \forall\, k = 1, \dots, n
+    %& T \le T_{max} \text{ Or add a constant to the obj. function}
+\end{align*}
+where $(x_k, y_k)$ denotes the $k$-th sampled coordinate along the drone's contour, and $\mathbb{X}$ is the set of coordinates occupied by gate borders. This constraint renders the feasible set non-convex.
+
+To turn it into a convex set, this project decomposes the full trajectory into segments, each connecting two consecutive sides of a gate. The overall time minimization problem then reduces to independently minimizing the flight time of each segment $T_m$ in $n$ sub-tasks. Hence, the optimization problem becomes:
+\begin{align}
+    \min \quad & T_m = h_m k_m \\
+    \text{s.t. }\quad &\text{constraints from Eq. \ref{eq:model} and \ref{eq:max_u}} \nonumber \\    
+    & \mathbf{q_{m}} = \mathbf{q_{m-1}} \label{eq: continuity}
+\end{align}
+Where $T_{total} = \sum_{m=1}^{n} T_m$, Eq. \ref{eq: continuity} guarantees that the initial state of the current sub-task in continuous with the final state of the previous sub-task.
+
+To solve this convex optimization problem, we'll use the \texttt{cvxpy} package as the problem solver. The optimized variables are $\mathbf{a}$, $\mathbf{b}$ (params in the smooth functions), and $h_m$.
+
+\subsection*{Milestone III}
+We will plot the quadrotor's trajectory as well as the visualization to validate our design and. If time permits, we'll figure out if we can let the algorithm optimize the path instead of specifying the final states in each sub-task.
+
+\section{\textbf{Expected Outcome}}
+We aim to develop a complete planar quadrotor control pipeline-grounded in the theory covered in lecture, and demonstrate its effectiveness in the simulated environment by converting a non-convex problem into a convex optimization formulation. The solution should shows a elaborated and decent control trajectory.
+
+\section{\textbf{Team information}}
+We'll collaborate on the GitHub repository provided above.
+Besides, this project will be based on two students' collaboration: Yuchen Chen \href{yuchen\_chen@ucsb.edu}{yuchen\_chen@ucsb.edu} and Tianyi Chen \href{tianyi\_chen@ucsb.edu}{tianyi\_chen@ucsb.edu}.
+
+%\bibliographystyle{IEEEtran}
+%\bibliography{ref.bib}%
+
+%\section{Questions}
+%\begin{itemize}
+%    \item Control $h$ or $k$: Whether the program accepts a variable for a cvxpy variable. $\to$ change the time step $h$.
+%    \item How to setup the final state of each segment: Manually or determined by algorithm.
+%\end{itemize}
+
+%\newpage
+%Project topic and motivation: What problem do you want to study, and why is it interesting or relevant? Your project should be well aligned with the material covered in the course. Try to be specific about which concepts, methods, or techniques from the class you plan to use.\\
+
+%Technical approach: Provide a concrete plan for how you intend to carry out the project. This may include developing a new method, extending an existing one, or implementing and evaluating known techniques on a particular problem. At this stage, clarity and feasibility are more important than ambition.\\
+
+%Expected outcomes: What do you hope to demonstrate by the end of the project? For example, do you aim to improve an algorithm, or provide empirical validation through simulations or experiments? The quarter is short, so it is important to choose a project that is appropriately scoped. Indicate what you consider to be the “minimal viable project” and any possible extensions if time permits.\\
+
+%Preliminary references: List a few relevant papers, books, or other resources that will inform your work. This will help ensure that your project is grounded in existing literature.\\
+
+%Team information (if applicable): If you are working in a team (at most 3 people), list all members and briefly describe how you expect to divide the work. Keep in mind that expectations will scale with the number of team members.
+\end{document}
