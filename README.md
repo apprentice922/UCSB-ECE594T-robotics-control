@@ -1,6 +1,6 @@
 ## Docs:
 - Overleaf: [link](https://www.overleaf.com/project/69e14af9f0dffb3cf79c497b)
-- Google docs: [link]()
+- Slide: [link](https://docs.google.com/presentation/d/1n8pPTcRT5xGPVQExOGrhLRYNoHsAOd-rifjKl72mJAA/edit?usp=sharing)
 
 ## Tentative Project: Planar quadrator control with checkpoints, minimize time
 (Add any helpful information!) 
