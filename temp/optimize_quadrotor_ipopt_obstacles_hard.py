@@ -10,7 +10,7 @@ workspace logic.
 import numpy as np
 import cvxpy as cp
 
-from quadrotor_dynamics import f_discrete
+from quadrotor_dynamics import m, g, I, r
 from plot_utils import plot_trajectory
 
 
@@ -71,6 +71,28 @@ def _add_gate_constraints(
 
     return constraints
 
+def f_discrete_linear(x, u, h):
+    """
+    Linearized discrete-time dynamics around hover with small-angle assumption.
+    State: x = [q1, v1, q2, v2, q3, w]
+    Control: u = [u1, u2]
+    """
+    q1, v1, q2, v2, q3, w = x
+    u1, u2 = u
+    u_sum = u1 + u2
+    xdot = cp.hstack(
+        [
+            v1,
+            -g * q3,
+            v2,
+            (1.0 / m) * u_sum - g,
+            w,
+            (r / I) * (u2 - u1),
+        ]
+    )
+    return x + h * xdot
+
+
 
 def solve_quadrotor_with_obstacles_hard(
     N=200,
@@ -115,7 +137,7 @@ def solve_quadrotor_with_obstacles_hard(
     for k in range(N):
         xk = x[:, k]
         uk = cp.hstack([u1[k], u2[k]])
-        x_next = f_discrete(xk, uk, h)
+        x_next = f_discrete_linear(xk, uk, h)
         constraints += [x[:, k + 1] == x_next]
 
     # Control bounds
