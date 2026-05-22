@@ -1,17 +1,11 @@
 ## Docs:
 - Overleaf: [link](https://www.overleaf.com/project/69e14af9f0dffb3cf79c497b)
-- Slide: [link](https://docs.google.com/presentation/d/1n8pPTcRT5xGPVQExOGrhLRYNoHsAOd-rifjKl72mJAA/edit?usp=sharing)
+- Slide: [link](https://docs.google.com/presentation/d/1n8pPTcRT5xGPVQExOGrhLRYNoHsAOd-rifjKl72mJAA/edit?usp=sharing) / [link](https://docs.google.com/presentation/d/19Y5HKb4kWksdJhwh4jv9UD1ZJLGkIPckAD13lv50kEk/edit?slide=id.g4702670f3a_2_74#slide=id.g4702670f3a_2_74)
 
-## Tentative Project: Planar quadrator control with checkpoints, minimize time
-(Add any helpful information!) 
-Demo: 
+## Planar quadrator control with checkpoints, minimize efforts
+Demo:
 
-    =>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>
-              ||    ||    ||
-      __.__         ||    ||   (end)
-     (start)  ||    ||          
-              ||          ||
-    =>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>
+![control trajectory](results/test1.gif)
     
 
 
