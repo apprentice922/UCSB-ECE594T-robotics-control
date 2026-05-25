@@ -36,14 +36,16 @@ $$
 
 By $$\frac{(1)}{(2)}$$, $$q_3$$ can be acquired: $$q_3 = -tan^{-1}\frac{m\ddot{q_1}}{m\ddot{q_2}+mg}$$
 
-### Solution
+### To Do:
+- [x] dynamic function
+- [x] environment visualization
+- [x] trajectory optimization
+    - [x] first-order approximation for equality constraints
+    - [x] IPOPT solver
+- [ ] trajectory optimization in avoiding obstacles
+    - [x] minimize efforts by decomposing obstacle validation constraints
+    - [ ] visulation of thrust polishment
+    - [ ] minimize time consumption by MICP
+    - [ ] Use soft constraints (penaly) to solve the problem  
 
-Control from one point to another
-
-$$
-\begin{align*}
-q &= a_7t^7 + a_6t^6+ a_5t^5 + a_4t^4+a_3t^3+a_2t^2+a_1t + a_0
-\end{align*}
-$$
-
-Rest Part are in [proposal](proposal/ECE594T_project_proposal.pdf)
+Rest Part are in [proposal](proposal/ECE594T_project_proposal.pdf)(outdated)
