@@ -405,6 +405,9 @@ def animate_uq(u, q, dt=0.01, interval=None, draw=True, return_anim=False, save_
     else:
         return html_obj
 
+import numpy as _np
+import matplotlib.pyplot as _plt
+from matplotlib import animation as _animation
 
 def animate_trajectory(height, width, setup_dict, obstacles, trajectory, thrusts=None, gate_width=.01,
                        dt=0.01, interval=None, draw=True, return_anim=False, save_path=None,
@@ -430,9 +433,6 @@ def animate_trajectory(height, width, setup_dict, obstacles, trajectory, thrusts
     -------
     If return_anim is True: (anim, html_or_none) else html_or_none or None
     """
-    import numpy as _np
-    import matplotlib.pyplot as _plt
-    from matplotlib import animation as _animation
 
     traj = _np.asarray(trajectory)
     if traj.ndim != 2 or traj.shape[1] < 2:
@@ -471,8 +471,8 @@ def animate_trajectory(height, width, setup_dict, obstacles, trajectory, thrusts
     body_line, = ax.plot([], [], c='b', linewidth=2)
     rotor1_line, = ax.plot([], [], c='b', linewidth=1)
     rotor2_line, = ax.plot([], [], c='b', linewidth=1)
-    thrust1_line, = ax.plot([], [], c='r', linewidth=1, alpha=0.7)
-    thrust2_line, = ax.plot([], [], c='r', linewidth=1, alpha=0.7)
+    thrust1_line, = ax.plot([], [], c='r', linewidth=1, alpha=0.5)
+    thrust2_line, = ax.plot([], [], c='r', linewidth=1, alpha=0.5)
     if trail:
         trail_line, = ax.plot([], [], c='b', linewidth=1, alpha=0.6)
     else:
@@ -514,11 +514,11 @@ def animate_trajectory(height, width, setup_dict, obstacles, trajectory, thrusts
 
         # thrust vectors
         d = ep1 - ep0
-        v = _np.array([-d[1], d[0]]) / 100.0
+        v = _np.array([-d[1], d[0]]) / 20.0
         u1 = float(thrusts[i, 0])
         u2 = float(thrusts[i, 1])
-        f1_end = ep0 + v * u1
-        f2_end = ep1 + v * u2
+        f1_end = ep0 + v * np.exp(u1/4)
+        f2_end = ep1 + v * np.exp(u2/4)
         thrust1_line.set_data([ep0[0], f1_end[0]], [ep0[1], f1_end[1]])
         thrust2_line.set_data([ep1[0], f2_end[0]], [ep1[1], f2_end[1]])
 
