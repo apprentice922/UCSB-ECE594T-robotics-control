@@ -210,7 +210,7 @@ def plot_trajectory(height, width, setup_dict, obstacles, trajectory, thrusts, g
 
         for uj, ei in zip([u1, u2], endpoints):
             force_start = ei
-            force_end = ei + v * uj
+            force_end = ei + v * (uj/4) ** 3
             ax.plot([force_start[0], force_end[0]],
                    [force_start[1], force_end[1]],
                    c='r', linewidth=1, alpha=0.6)
@@ -517,8 +517,8 @@ def animate_trajectory(height, width, setup_dict, obstacles, trajectory, thrusts
         v = _np.array([-d[1], d[0]]) / 20.0
         u1 = float(thrusts[i, 0])
         u2 = float(thrusts[i, 1])
-        f1_end = ep0 + v * np.exp(u1/4)
-        f2_end = ep1 + v * np.exp(u2/4)
+        f1_end = ep0 + v * (u1/5.5) ** 3
+        f2_end = ep1 + v * (u2/5.5) ** 3
         thrust1_line.set_data([ep0[0], f1_end[0]], [ep0[1], f1_end[1]])
         thrust2_line.set_data([ep1[0], f2_end[0]], [ep1[1], f2_end[1]])
 

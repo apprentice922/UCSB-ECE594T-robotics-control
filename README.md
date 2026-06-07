@@ -1,11 +1,11 @@
 ## Docs:
-- Overleaf: [link](https://www.overleaf.com/project/69e14af9f0dffb3cf79c497b)
-- Slide: [link](https://docs.google.com/presentation/d/1n8pPTcRT5xGPVQExOGrhLRYNoHsAOd-rifjKl72mJAA/edit?usp=sharing) / [link](https://docs.google.com/presentation/d/19Y5HKb4kWksdJhwh4jv9UD1ZJLGkIPckAD13lv50kEk/edit?slide=id.g4702670f3a_2_74#slide=id.g4702670f3a_2_74)
+- Overleaf: [link](https://www.overleaf.com/project/6a11684f4de1f4e676ab6b45)
+- Slide: [link](https://docs.google.com/presentation/d/19Y5HKb4kWksdJhwh4jv9UD1ZJLGkIPckAD13lv50kEk/edit?slide=id.g4702670f3a_2_74#slide=id.g4702670f3a_2_74)
 
 ## Planar quadrator control with checkpoints, minimize efforts
-Demo:
+Demo (others are in the [results/](results/) folder):
 
-![control trajectory](results/test1.gif)
+![control trajectory](results/min_t.gif)
     
 
 
@@ -42,10 +42,9 @@ By $$\frac{(1)}{(2)}$$, $$q_3$$ can be acquired: $$q_3 = -tan^{-1}\frac{m\ddot{q
 - [x] trajectory optimization
     - [x] first-order approximation for equality constraints
     - [x] IPOPT solver
-- [ ] trajectory optimization in avoiding obstacles
+- [x] trajectory optimization in avoiding obstacles
     - [x] minimize efforts by decomposing obstacle validation constraints
-    - [ ] visulation of thrust polishment
-    - [ ] minimize time consumption by MICP
-    - [ ] Use soft constraints (penaly) to solve the problem  
+    - [x] visulation of thrust polishment
+    - [x] minimize time consumption by MICP
 
 Rest Part are in [proposal](proposal/ECE594T_project_proposal.pdf)(outdated)
